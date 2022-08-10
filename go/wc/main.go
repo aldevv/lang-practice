@@ -41,7 +41,7 @@ func main() {
 	file := os.Args[len(os.Args)-1]
 	flag.Parse()
 
-	if file == "wc" {
+	if len(os.Args) == 1 {
 		fmt.Println(count(os.Stdin, *lines, *bytes))
 		return
 	}
