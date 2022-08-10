@@ -1,3 +1,5 @@
 #!/bin/bash
-git add go python
-find rust -exec git add {} \;
+git add go python 2>/dev/null
+find rust -exec git add {} \; 2>/dev/null
+git commit --allow-empty-message -m ""
+git push origin master
