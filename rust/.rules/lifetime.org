@@ -1,0 +1,104 @@
+* 3 lLifetime elision rules
+1. each parameter that is a reference gets its own
+lifetime parameter
+
+2. if there is exactly one input lifetime parameter,
+that lifetime is assigned to all output lifetime parameters
+
+# this ones is for methods only
+3. if there are multiple input lifetime parameters, but
+one of them is &self or &mut self, the lifetime of self
+is assigned to all output lifetime parameters
+** lifetime annotations
+    they are generic types 
+    use them for REFERENCES
+    to define a lifetime in a function put it to the right of the function
+    #+BEGIN_SRC rust
+        fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+            if x.len() > y.len() {
+                x
+            } else {
+                y
+            }
+        }
+    #+END_SRC
+
+    lifetime annotations define's a relationship between the INPUTS and the OUTPUTS,
+    in the previous example, it means the return value will have the same lifetime
+    as the **SMALLEST** lifetime of the arguments
+
+    #+BEGIN_SRC rust
+        // this will work because string1 and string2 still exist
+        let string1: String = String::from("abcd");
+        {
+            let string2: String = String::from("xyz");
+            let result: &str = longest(x: string1.as_str(), y: string2.as_str());
+            println!("The longest string is {}", result);
+        }
+    #+END_SRC
+
+    #+BEGIN_SRC rust
+        // this won't work, because string2 dies first
+        let string1: String = String::from("abcd");
+        let result: &str;
+        {
+            let string2: String = String::from("xyz");
+            result: &str = longest(x: string1.as_str(), y: string2.as_str());
+        }
+        println!("The longest string is {}", result);
+    #+END_SRC
+
+*** struct lifetime annotations
+
+    #+BEGIN_SRC rust
+        struct ImportantExcerpt<'a> {
+            part &'a str,
+        }
+
+        // rule 3 applies since is a method with &self
+        impl<'a> ImportantExcerpt<'a> {
+            fn return_part(&self, announcement: &str) -> &str {
+                println!("Attention please: {}", announcement);
+                self.part
+            }
+        }
+    #+END_SRC
+
+
+** Dangling references
+  dangling references mean references to invalid data
+
+  #+BEGIN_SRC rust
+      // this will output an error
+      let r: &i32;
+      {
+        let x: i32 = 5;
+        r = &x; // this data become invalid after the braces because the pointer will point to
+        //nothing
+      }
+  #+END_SRC
+
+** DON'T Return a reference of a function defined variable 
+   local variables are destroyed after the scope ends,
+   so you can't return a reference to one
+
+   #+BEGIN_SRC rust
+    // this won't work
+    fn longest<'a>(x: &str, y: &str) -> &'a str {
+        let result: String = String::from("really long string");
+        result.as_str()
+    }
+   #+END_SRC
+    if you want to return a reference:
+        1. IT HAS to be one to one of the parameters passed to the function
+        or
+        2. the return value is an OWNED Type 
+
+** static lifetime
+   the static lifetime means that the reference can live as long as the duration of the program
+
+   all string literals (&str) have static lifetimes
+
+
+
+
