@@ -50,8 +50,8 @@ ownership is given to functions if you don't pass a ref
 #+END_SRC
 
 * Reference Rules
-1. at any given time, you can have either ONE mutable reference or ANY number of immutable
-   references
+1. at any given time, you can have either ONE mutable reference 
+   or ANY number of immutable references
 
 2. References must always be valid
 ** no multiple mut references
@@ -93,6 +93,30 @@ ownership is given to functions if you don't pass a ref
     // since r1 and r2 were last used in the print, their scope is done
     let r3: &String = &mut s;
   #+END_SRC
+
+* const
+  they are available during the who application life
+  (in the scope it was declared in)
+  there are 3 differences to a variable (without mut)
+1. const recieves no mut keyword
+2. they can be declared in ANY scope, including the GLOBAL scope
+3. they are set ONLY to a constant expresion,
+   since functions are computed in runtime, they are not
+   constant expresions
+
+   #+BEGIN_SRC rust
+       const MAX_POINTS: u32 = 100_100;
+   #+END_SRC
+* shadowing
+  you can set a variable again using the same name
+
+#+BEGIN_SRC rust
+let guess = String::from("28");
+let guess: usize = match guess.trim().parse() {
+    Ok(num) => num,
+    Err(_) => continue
+};
+#+END_SRC
 
 * usize
 On a 32 bit system, isize is the same as i32 and usize is the same as u32. On a 64 bit system, isize is the same as i64 and usize is the same as u64.
