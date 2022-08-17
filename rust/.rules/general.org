@@ -1,0 +1,109 @@
+* types
+** scalar types 
+*** integers
+      - from 8 to 128 bits signed or unsigned
+      - integers can be written as decimal, hex, octal, binary and bytes
+      - if there is an overflow there will be a panic, if 
+      is on --release mode, the number will wrap. 
+        Ex: 255 + 1 = 0 
+        Ex: 255 + 3 = 2 
+*** floating point numbers
+      32 and 64 bits
+*** booleans
+    they are 1 byte in size (8 bits)
+*** characters
+    four bytes, represents unicode scalar
+    (much more than just ascii)
+    but a char is not a concept that exists in unicode
+    so keep that in mind
+
+** compound types
+*** tuple
+    they are inmutable
+    #+BEGIN_SRC rust
+        let tup: (i32, f64, u8) = (500, 6.4, 1);
+    #+END_SRC
+
+    you can use destructuring on them like this
+    #+BEGIN_SRC rust
+        let (x, y , z) = tup;
+    #+END_SRC
+
+    you can access the elements in the tuple by using a period
+
+    #+BEGIN_SRC rust
+        let five_hundred = x.0
+        let six_point_four = x.1
+    #+END_SRC
+*** array
+    - useful when you want your data stored in the stack
+    instead of the heap
+    - also useful when you always have a fixed number of elements
+
+    when you don't know whether to use an array or a vector
+    always use a vector, since it can grow or shrink in size
+
+    you might want to use an array rather than a vector
+    in cases like when you need the names of the months
+    of the year, since is unlikely they will change
+
+    #+BEGIN_SRC rust
+    let months = ["January", "February", "March", "April", "May", "June", "July",
+              "August", "September", "October", "November", "December"];
+    #+END_SRC
+
+    for the type you can do it like this:
+    #+BEGIN_SRC rust
+        let a: [i32; 5] = [1, 2, 3, 4, 5];
+    #+END_SRC
+
+    if you want an array where every element has the same value
+    do it like this:
+    #+BEGIN_SRC rust
+        let a: [3; 5];
+        // this is equal to
+        // [3, 3, 3, 3, 3];
+    #+END_SRC
+
+    to access elements in the array use this syntax:
+    #+BEGIN_SRC rust
+        let a: [3; 5];
+        let first = a[0];
+        let second = a[1];
+    #+END_SRC
+
+    if you access an invalid index, rust will panic
+
+
+* functions
+  in function signatures YOU MUST declare the type of
+  each parameter
+* rust is statically typed
+  which means it must know the types of all variables
+  at COMPILE TIME
+
+  most of the time it can infer it, but sometimes it can't
+  like here:
+
+  #+BEGIN_SRC rust
+   // this won't work, because it can't infer the type
+    let guess = "42".parse().expect("Not a number!");
+  #+END_SRC
+
+  #+BEGIN_SRC rust
+   // this will work
+    let guess: i32 = "42".parse().expect("Not a number!");
+  #+END_SRC
+* turbofish operator ::<>
+  useful to define a type a function should use
+  internally 
+
+  #+BEGIN_SRC rust
+  // without turbofish
+let guess_parsed: usize = guess.trim_end().parse()↲
+│            .expect("please put a valid num");↲
+│    ↲
+  // with turbofish
+let guess_parsed: usize = guess.trim_end().parse::<i32>()↲
+│            .expect("please put a valid num");↲
+  #+END_SRC
