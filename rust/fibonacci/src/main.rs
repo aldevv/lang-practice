@@ -1,18 +1,18 @@
-fn fibonacci(n: i32) -> i32{
+fn fibonacci(n: i32) -> i32 {
     if n == 0 {
-        return 1
+        return 0;
     }
     if n == 1 {
-        return 1
+        return 1;
     }
-    let mut cur = 2;
-    let mut prev = 1;
-    for _ in {2..n}.into_iter() {
+    let mut cur = 1;
+    let mut prev = 0;
+    for _ in { 2..n }.into_iter() {
         let tmp = cur;
         cur += prev;
         prev = tmp;
     }
-    return cur
+    return cur + prev;
 }
 
 fn main() {
@@ -21,7 +21,7 @@ fn main() {
 
 #[test]
 fn test_fibonacci() {
-    assert_eq!(fibonacci(6), 13);
-    assert_eq!(fibonacci(7), 21);
-    assert_eq!(fibonacci(8), 34);
+    assert_eq!(fibonacci(5), 5);
+    assert_eq!(fibonacci(7), 13);
+    assert_eq!(fibonacci(8), 21);
 }
