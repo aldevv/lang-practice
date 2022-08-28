@@ -1,0 +1,7 @@
+"*.rs": {
+    "alternate": [
+      "tests/{basename}.rs"
+    ],
+    "type": "source",
+    "console": "cargo run"
+  }

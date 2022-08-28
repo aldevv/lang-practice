@@ -107,3 +107,5 @@ let guess_parsed: usize = guess.trim_end().parse()↲
 let guess_parsed: usize = guess.trim_end().parse::<i32>()↲
 │            .expect("please put a valid num");↲
   #+END_SRC
+* trait bound (lifetimes)
+  using 'v: 'a means 'v OUTLIVES 'a

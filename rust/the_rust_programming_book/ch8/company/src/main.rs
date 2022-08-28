@@ -1,56 +1,58 @@
 use std::cmp::Ordering;
 
-struct Company {
+struct Company<'a> {
     name: String,
-    departments: Option<Vec<Department>>,
+    departments: Option<Vec<&'a Department<'a>>>,
 }
-struct Department {
+struct Department<'a> {
     name: String,
-    employees: Option<Vec<Employee>>,
+    employees: Option<Vec<&'a Employee>>,
 }
 
-#[derive(Eq)]
+#[derive(Debug, Eq, PartialEq, PartialOrd, Clone)]
 struct Employee {
     name: String,
 }
 
 impl Ord for Employee {
     fn cmp(&self, other: &Self) -> Ordering {
-        // TODO: check if this cmp works for Strings
         self.name.cmp(&other.name)
     }
 }
-// TODO: check what PartialOrd does
-impl PartialOrd for Employee {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(self.cmp(other))
-    }
-}
-// TODO: check what PartialEq does
-impl PartialEq for Employee {
-    fn eq(&self, other: &Self) -> bool {
-        self.name == other.name
-    }
-}
 
-impl Department {
-    fn add_employee(&mut self, employee: Employee) {
+impl<'a> Department<'a> {
+    // TODO: how do i make the employee's lifetime OUTLAST the Department?
+    fn add_employee<'v>(&mut self, employee: &'v Employee)
+    where
+        'v: 'a,
+    {
         // as_mut since self.employees is an &option(T) and we need &mut T
         self.employees.as_mut().unwrap().push(employee);
     }
 
-    fn get_employees(&mut self) {
-        // TODO: return employees sorted without modifying the original list
-        // HACK: clone the employees vector by implementing the clone trait
-        // let employee_copy = self.employees.clone();
-        return;
+    fn get_employees(&self) -> Vec<&Employee> {
+        let mut employees_copy = self.employees.as_ref().expect("no employees added").clone();
+        employees_copy.sort();
+        return employees_copy;
     }
 }
 
 fn main() {
+    let emp1 = Employee {
+        name: String::from("AK-47"),
+    };
+
+    let emp2 = Employee {
+        name: String::from("ZAndroid 23"),
+    };
+
+    let emp3 = Employee {
+        name: String::from("HAL"),
+    };
+
     let dep1 = Department {
         name: String::from("Human Processing"),
-        employees: None,
+        employees: Some(vec![&emp3, &emp2, &emp1]),
     };
 
     let dep2 = Department {
@@ -65,6 +67,8 @@ fn main() {
 
     let comp1 = Company {
         name: String::from("Skynet"),
-        departments: Some(vec![dep1, dep2, dep3]),
+        departments: Some(vec![&dep1, &dep2, &dep3]),
     };
+
+    println!("the output is: {:?}", dep1.get_employees())
 }

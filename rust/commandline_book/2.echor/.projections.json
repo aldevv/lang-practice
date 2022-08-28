@@ -1,0 +1,12 @@
+{
+    "*.rs": {
+        "alternate": [
+            "tests/{basename}.rs"
+        ],
+        "related": [
+            "Cargo.toml"
+        ],
+        "type": "source",
+        "console": "cargo run"
+    }
+}
