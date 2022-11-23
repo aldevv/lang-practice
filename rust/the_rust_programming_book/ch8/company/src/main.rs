@@ -1,8 +1,8 @@
 use std::cmp::Ordering;
 
-struct Company<'a> {
+struct Company<'a, 'b: 'a> {
     name: String,
-    departments: Option<Vec<&'a Department<'a>>>,
+    departments: Option<Vec<&'a Department<'b>>>,
 }
 struct Department<'a> {
     name: String,
