@@ -2,3 +2,5 @@
 .git/
 target
 node_modules/
+debug/
+.env
