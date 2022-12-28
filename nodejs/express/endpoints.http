@@ -1,0 +1,36 @@
+
+@host = http://localhost:3001
+
+POST {{host}}/user
+content-type: application/json
+{
+    "username": "domi",
+    "password": "rosa"
+}
+
+POST {{host}}/signin
+content-type: application/json
+
+{
+    "username": "domi",
+    "password": "rosa"
+}
+
+
+GET {{host}}
+
+GET {{host}}/api/product
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImE1MzYxODg5LTY2MjctNDliMy05OTEzLTVhODc2OGZmZDc4MiIsInVzZXJuYW1lIjoiZG9taSIsImlhdCI6MTY2OTMwNzcxMH0.PQziF0ou4JJCUpbrsiOdnGZl_uctZu81KwwF69pmHf0
+
+# get individual product
+GET {{host}}/api/product/1b5e308c-bae5-4cb3-a454-e6d5511e3d6e
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImE1MzYxODg5LTY2MjctNDliMy05OTEzLTVhODc2OGZmZDc4MiIsInVzZXJuYW1lIjoiZG9taSIsImlhdCI6MTY2OTMwNzcxMH0.PQziF0ou4JJCUpbrsiOdnGZl_uctZu81KwwF69pmHf0
+
+POST {{host}}/api/product
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImE1MzYxODg5LTY2MjctNDliMy05OTEzLTVhODc2OGZmZDc4MiIsInVzZXJuYW1lIjoiZG9taSIsImlhdCI6MTY2OTMwNzcxMH0.PQziF0ou4JJCUpbrsiOdnGZl_uctZu81KwwF69pmHf0
+
+{
+    "name": "ps5"
+}
+
+DELETE {{host}}/api/product/ba065b92-b41e-4ed6-b199-514123775c06

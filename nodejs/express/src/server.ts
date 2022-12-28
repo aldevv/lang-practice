@@ -1,12 +1,26 @@
+import dotenv from "dotenv";
+dotenv.config();
 import express from "express";
+import morgan from "morgan";
 
-const app = express()
+import router from "./router";
+import { createUser, signin } from "./handlers/user";
+import { protect } from "./modules/auth";
 
-app.get('/', (req, res) => {
-    console.log("hello from express")
-    res.status(200)
-    res.json({ message: "hello" })
-})
+const app = express();
 
+app.use(morgan("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-export default app
+app.get("/", (req, res) => {
+  console.log("hello from express");
+  res.status(200);
+  res.json({ message: "hello" });
+});
+
+app.use("/api", protect, router);
+app.post("/user", createUser);
+app.post("/signin", signin);
+
+export default app;
