@@ -6,7 +6,7 @@ where
 someFunc :: IO ()
 someFunc = getLine >>= \line -> print $ passwordStrength line
 
-data StrengthLevel = VeryWeak | Weak | Medium | Strong | VeryStrong | Unknown deriving (Show)
+data StrengthLevel = VeryWeak | Weak | Medium | Strong | VeryStrong | Unknown deriving (Show, Eq)
 
 passwordStrength :: String -> StrengthLevel
 passwordStrength s
