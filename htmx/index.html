@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <script
+      src="https://unpkg.com/htmx.org@1.9.5"
+      integrity="sha384-xcuj3WpfgjlKF+FXhSQFQ0ZNr39ln+hwjN3npfM9VBnUskLolQAcN80McRIVOPuO"
+      crossorigin="anonymous"
+    ></script>
+    <!-- for websockets -->
+    <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
+    <title>My HTMX test</title>
+  </head>
+
+  <body>
+    <h1>get html from server</h1>
+    <div id="parent-div">soy parent-div</div>
+    <button
+      hx-post="/clicked"
+      hx-trigger="click"
+      hx-target="#parent-div"
+      hx-swap="outerHTML"
+    >
+      Click Me!
+    </button>
+    <h1>sync for race conditions</h1>
+    <form hx-post="/store">
+      <input
+        id="title"
+        name="title"
+        type="text"
+        hx-post="/validate"
+        hx-trigger="change"
+        hx-sync="closest form:abort"
+      />
+      <button type="submit">Submit</button>
+    </form>
+    <h1>css</h1>
+    <button hx-delete="/css" hx-swap-oob="true" hx-swap="outerHTML">
+      change color
+    </button>
+    <!-- <button hx-get="/spin" hx-swap-oob="true"> -->
+    <h1>spin</h1>
+    <button id="spin" hx-get="/spin" hx-target="#spin" hx-swap="outerHTML">
+      Spin!
+      <img class="htmx-indicator" src="/static/assets/spinner.svg" />
+    </button>
+    <h1>inheritance for confirmations</h1>
+    <div hx-confirm="Are you sure?">
+      <button hx-delete="/account" hx-swap-oob="true" hx-swap="outerHTML">
+        Delete My Account
+      </button>
+      <button hx-put="/account" hx-swap-oob="true" hx-swap="outerHTML">
+        Update My Account
+      </button>
+    </div>
+    <h1>give me links plzzz</h1>
+    <div hx-boost="true">
+      <a href="/blog" hx-push-url="true">Blog</a>
+    </div>
+    <h1>same but with snapshots! it stores the DOM state in history</h1>
+    <div hx-boost="true">
+      <a hx-get="/blog" hx-push-url="true">Blog</a>
+    </div>
+
+    <h1>websockets 😻 (must use an extension)</h1>
+    <div hx-ext="ws" ws-connect="/chatroom">
+      <div id="notifications"></div>
+      <div id="chat_room">...</div>
+      <form id="form" ws-send>
+        <input name="chat_message" />
+      </form>
+    </div>
+  </body>
+</html>
