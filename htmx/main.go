@@ -97,31 +97,34 @@ func main() {
 			ChatMessage string `json:"chat_message"`
 		}
 
-		go func() {
-			for {
-				_, p, err := conn.ReadMessage()
-				if err != nil {
-					log.Error().Err(err).Msg("failed to read message")
-					return
+		for {
+			_, p, err := conn.ReadMessage()
+			if err != nil {
+				conn.Close()
+				for i, c := range connections {
+					if c == conn {
+						// remove from connections
+						connections = append(connections[0:i], connections[i+1:]...)
+					}
 				}
-				var msg Msg
-				json.Unmarshal(p, &msg)
+				log.Error().Err(err).Msg("failed to read message")
+				return
+			}
+			var msg Msg
+			json.Unmarshal(p, &msg)
 
-				content := fmt.Sprintf(`
+			content := fmt.Sprintf(`
 				<div hx-swap-oob="beforeend:#chat_room">
 					<p>%s</p>
 				</div>`, msg.ChatMessage)
 
-				go func() {
-					for _, c := range connections {
-						if err := c.WriteMessage(websocket.TextMessage, []byte(content)); err != nil {
-							log.Error().Err(err).Msg("failed to write message")
-							return
-						}
-					}
-				}()
+			for _, c := range connections {
+				if err := c.WriteMessage(websocket.TextMessage, []byte(content)); err != nil {
+					log.Error().Err(err).Msg("failed to write message")
+					return
+				}
 			}
-		}()
+		}
 	})
 
 	http.ListenAndServe(":3000", nil)
